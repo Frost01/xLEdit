@@ -17,12 +17,13 @@ namespace xLEdit
             get { return _dataTable; }
         }
 
-        public CsvLoader()
+        public CsvLoader(string fName, char splitChar)
         {
             _dataTable = new DataTable();
+            this.Load(fName,splitChar);
         }
 
-        public void Load(string fName, char splitChar)
+        private void Load(string fName, char splitChar)
         {
             _splitChar = splitChar;
             FileInfo fi = new FileInfo(fName);

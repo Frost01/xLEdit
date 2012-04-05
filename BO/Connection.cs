@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Castle.ActiveRecord;
+using NHibernate.Criterion;
 
 namespace BO
 {
@@ -41,6 +42,20 @@ namespace BO
             get { return _flexion; }
             set { _flexion = value; }
         }
+        
+        public static bool Exists(Baseword bw, Flexion flexion, GramFunction gramFunction)
+        {
+            return Exists(typeof (Connection), Expression.Eq("Baseword", bw), Expression.Eq("Flexion", flexion),
+                          Expression.Eq("GramFunction", gramFunction));
+        }
 
+        public static Connection FindByBasewordAndFunction(Baseword bw, GramFunction gramFunction)
+        {
+            if (Exists(typeof(Connection), Expression.Eq("Baseword", bw),
+                             Expression.Eq("GramFunction", gramFunction)))
+                return (Connection)FindFirst(typeof(Connection), Expression.Eq("Baseword", bw),
+                                 Expression.Eq("GramFunction", gramFunction));
+            else return null;
+        }
     }
 }

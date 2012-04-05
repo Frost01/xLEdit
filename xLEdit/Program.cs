@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using BO;
 using Castle.ActiveRecord;
+using Castle.ActiveRecord.Framework.Config;
 using Microsoft.Practices.EnterpriseLibrary.Logging;
+using NHibernate;
 using NHibernate.Criterion;
 
 namespace xLEdit
@@ -18,46 +20,26 @@ namespace xLEdit
         {
             Utils.InitializeCasteActiveRecordFramework();
 
-            using (new SessionScope())
+            using (var sessionScope = new SessionScope())
             {
-                var loader = new CsvLoader();
-                loader.Load("import_prep.txt", '\t');
-                var import = new TranslationImport(loader.DataTable, Language.Find(1), Language.Find(4),
-                                                   Wordtype.Find(12));
-                import.DoImport();
+                //var loader = new CsvLoader();
+                //loader.Load("import_prep.txt", '\t');
+                //var import = new TranslationImport(loader.DataTable, Language.Find(1), Language.Find(4),
+                //                                   Wordtype.Find(12));
+                //import.DoImport();
+
+
+                var loader = new CsvLoader("deleteBasewords.txt", '\t');
+                Basewords.DeleteByIds(loader.DataTable);
+
+                //var loader = new CsvLoader("updateFlexions.txt",'\t');
+                //Basewords.UpdateConnections(loader.DataTable);
+
+
                 Console.Out.WriteLine("Finished import...");
                 Console.ReadKey();
             }
 
-
-
-
-            //Logger.Write("Program started...","Import");
-            //using (new SessionScope())
-            //{
-            //    var bw = Baseword.Find(2343);
-
-            //    Console.WriteLine(bw.Text + " - " + bw.Comment);
-
-            //    foreach (Flexion flexion in bw.Flexions)
-            //    {
-            //        Console.WriteLine(flexion.Id + " - " +flexion.Text);
-            //    }
-
-            //    foreach (GramFunction gramFunction in bw.GramFunctions)
-            //    {
-            //        var propertyDic = new Dictionary<string, object>();
-            //        propertyDic.Add("Baseword",bw);
-            //        propertyDic.Add("GramFunction",gramFunction);
-
-            //        var connection = Connection.FindFirst(Expression.AllEq(propertyDic));
-
-            //        Console.WriteLine(connection.GramFunction.Id + " - "+ connection.Flexion.Text);
-            //    }
-            //    //bw.Comment = "Test";
-            //    //bw.Update();
-            //}
-            //Console.ReadKey();
         }
     }
 }

@@ -45,5 +45,19 @@ namespace BO
             get { return _connections;}
             set { _connections = value; }
         }
+
+        public static Flexion GetOrCreateWith(string text)
+        {
+            if (Exists(typeof(Flexion), Expression.Eq("Text", text)))
+            {
+                return (Flexion)FindFirst(typeof(Flexion), Expression.Eq("Text", text));
+            }
+            else
+            {
+                var flexion = new Flexion(text);
+                flexion.Create();
+                return flexion;
+            }
+        }
     }
 }

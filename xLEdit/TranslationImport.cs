@@ -67,7 +67,7 @@ namespace xLEdit
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write("Translation Import Failed on Row {0} with Error :" + ex.Message);
+                    Logger.Write(string.Format("Translation Import Failed with Error : {0}",  ex.Message));
                     using (var writer = new StreamWriter(string.Format("ImportLog.csv")))
                     {
                         writer.Write(sb.ToString());
