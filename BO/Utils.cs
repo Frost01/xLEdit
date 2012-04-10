@@ -15,7 +15,7 @@ namespace BO
         public static void InitializeCasteActiveRecordFramework()
         {
             var config = ActiveRecordSectionHandler.Instance;
-            ActiveRecordStarter.Initialize(config, typeof(Baseword), typeof(Language), typeof(Wordtype), typeof(Flexion), typeof(GramFunction), typeof(Connection), typeof(Translation));
+            ActiveRecordStarter.Initialize(config, typeof(Baseword), typeof(Language), typeof(Wordtype), typeof(Flexion), typeof(GramFunction), typeof(Connection), typeof(Translation), typeof(Specialty), typeof(LinguisticFeature));
             _sessionScope = new SessionScope();
         }
 

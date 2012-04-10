@@ -32,13 +32,17 @@ namespace BO
             set { _basewordTo = value; }
         }
 
-        public static void InsertIfNotExists(Baseword fBaseword, Baseword tBaseword)
+        [Property("pos")]
+        public virtual int Position { get { return _pos; } set { _pos = value; } }
+
+        public static void InsertIfNotExists(Baseword fBaseword, Baseword tBaseword, int position = 0)
         {
             if (!Exists(typeof(Translation), Expression.Eq("BasewordFrom", fBaseword), Expression.Eq("BasewordTo", tBaseword)))
             {
                 var translation = new Translation();
                 translation.BasewordFrom = fBaseword;
                 translation.BasewordTo = tBaseword;
+                if (position != 0) translation.Position = position;
                 translation.Save();
             }
         }

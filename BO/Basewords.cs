@@ -42,29 +42,15 @@ namespace BO
                     if (Int32.TryParse(row[0].ToString(), out id))
                     {
                         var bw = Baseword.Find(id);
+                        var flexions = new string[row.ItemArray.Count() - 1];
                         for (int i = 1; i < row.ItemArray.Count(); i++)
                         {
-                            var flexion = Flexion.GetOrCreateWith(row.ItemArray[i].ToString());
-                            var connection = Connection.FindByBasewordAndFunction(bw, bw.GramFunctions[i - 1]);
-                            if (connection == null)
-                            {
-                                connection = new Connection();
-                                connection.Flexion = flexion;
-                                connection.Baseword = bw;
-                                connection.GramFunction = bw.GramFunctions[i - 1];
-                                bw.Connections.Add(connection);
-                                //bw.Update();
-                            }
-                            if (!connection.Flexion.Equals(flexion))
-                            {
-                                connection.Flexion = flexion;
-                                //connection.Update();
-                            }
-                            bw.Save();
+                            flexions[i - 1] = row.ItemArray[i].ToString();
                         }
+                        bw.UpdateFlexions(flexions);
                         Console.Out.WriteLine(string.Format("{3}: Updated Baseword {0}/{1} with id:{2}",
-                                                            dt.Rows.IndexOf(row), dt.Rows.Count, bw.Id,
-                                                            DateTime.Now.ToString(CultureInfo.InvariantCulture)));
+                                                                dt.Rows.IndexOf(row), dt.Rows.Count, bw.Id,
+                                                                DateTime.Now.ToString(CultureInfo.InvariantCulture)));
                     }
                 }
                 transaction.Flush();

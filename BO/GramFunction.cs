@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Castle.ActiveRecord;
+using NHibernate.Criterion;
 
 namespace BO
 {
@@ -41,5 +42,19 @@ namespace BO
             get { return _wordtype; }
             set { _wordtype = value; }
         }
+
+        public static int NumberOfFunctionsForWordTypeAndLanguage(Wordtype wordtype, Language language)
+        {
+            return
+                FindAll(typeof (GramFunction), Expression.Eq("Wordtype", wordtype),
+                        Expression.Eq("Language", language)).Length;
+        }
+
+        public static IList<GramFunction> FindByWordTypeAndLanguage(Wordtype wordtype, Language language)
+        {
+            var functionArray = FindAll(typeof (GramFunction), Expression.Eq("Wordtype", wordtype),
+                           Expression.Eq("Language", language));
+            return functionArray.Cast<GramFunction>().ToList();
+        } 
     }
 }
