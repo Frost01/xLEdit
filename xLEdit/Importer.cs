@@ -25,6 +25,22 @@ namespace xLEdit
             _targetLanguage = targetLanguage;
         }
 
+        public void DoSimpleImport()
+        {
+            var sb = new StringBuilder();
+            foreach (DataRow row in _dt.Rows)
+            {
+                var baseword = Baseword.GetOrCreateBy(row[0].ToString(), _language, _wordtype);
+                baseword.Save();
+                var targetBaseword = Baseword.GetOrCreateBy(row[1].ToString(), _targetLanguage, _wordtype);
+                targetBaseword.Save();
+                Translation.InsertIfNotExists(baseword, targetBaseword, withBothDirection: true);
+                sb.AppendLine(baseword.Id + ";" + baseword.Text + ";" + targetBaseword.Id + ";" + targetBaseword.Text);
+                Console.Out.WriteLine(string.Format("Added Baseword {0} with Id: {1} and Translation {2}", baseword.Text, baseword.Id, targetBaseword.Text));
+            }
+            WriteImportLog("SimpleImport.csv",sb.ToString());
+        }
+
         public void DoImport(bool withSpecifics, int specCol = 0)
         {
             var sb = new StringBuilder();
@@ -34,12 +50,7 @@ namespace xLEdit
                 {
                     var karlId = row[0].ToString();
                     // Baseword
-                    var bwFrom = Baseword.FindByTextLanguageType(row[1].ToString(), _language, _wordtype);
-                    if (bwFrom == null)
-                    {
-                        bwFrom = new Baseword(row[1].ToString().Trim(),_wordtype, _language);
-                        bwFrom.Save();
-                    }
+                    var bwFrom = Baseword.GetOrCreateBy(row[0].ToString(), _language, _wordtype);
                     // Flexions
                     int numberOfFunctions = GramFunction.NumberOfFunctionsForWordTypeAndLanguage(_wordtype, _language);
                     var flexions = new string[numberOfFunctions];
@@ -84,9 +95,14 @@ namespace xLEdit
                     Logger.Write(string.Format("Import Failed with Error : {0}",ex));
                 }
             }
-            using (var writer = new StreamWriter(string.Format("FullImportLog.csv")))
+            Importer.WriteImportLog("FullImportLog.csv",sb.ToString());
+        }
+
+        public static void WriteImportLog(string fName, string content)
+        {
+            using (var writer = new StreamWriter(fName))
             {
-                writer.Write(sb.ToString());
+                writer.Write(content);
             }
         }
     }

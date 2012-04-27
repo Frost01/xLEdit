@@ -35,7 +35,7 @@ namespace BO
         [Property("pos")]
         public virtual int Position { get { return _pos; } set { _pos = value; } }
 
-        public static void InsertIfNotExists(Baseword fBaseword, Baseword tBaseword, int position = 0)
+        public static void InsertIfNotExists(Baseword fBaseword, Baseword tBaseword, int position = 0, bool withBothDirection = false)
         {
             if (!Exists(typeof(Translation), Expression.Eq("BasewordFrom", fBaseword), Expression.Eq("BasewordTo", tBaseword)))
             {
@@ -44,6 +44,11 @@ namespace BO
                 translation.BasewordTo = tBaseword;
                 if (position != 0) translation.Position = position;
                 translation.Save();
+
+                if (withBothDirection)
+                {
+                    InsertIfNotExists(tBaseword,fBaseword,position,false);
+                }
             }
         }
     }

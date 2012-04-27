@@ -129,5 +129,10 @@ namespace BO
                 this.Save();
             }
         }
+
+        public static Baseword GetOrCreateBy(string text, Language language, Wordtype wordtype)
+        {
+            return FindByTextLanguageType(text, language, wordtype) ?? new Baseword(text, wordtype, language);
+        }
     }
 }
