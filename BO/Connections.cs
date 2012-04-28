@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NHibernate.Criterion;
 
-namespace BO
+namespace Models
 {
     public class Connections
     {

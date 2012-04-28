@@ -4,7 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BO;
+using Models;
 using Microsoft.Practices.EnterpriseLibrary.Logging;
 
 namespace xLEdit

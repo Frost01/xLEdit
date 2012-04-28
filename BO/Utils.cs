@@ -7,7 +7,7 @@ using Castle.ActiveRecord.Framework;
 using Castle.ActiveRecord.Framework.Config;
 using NHibernate;
 
-namespace BO
+namespace Models
 {
     public static class Utils
     {

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BO;
+using Models;
 using Castle.ActiveRecord;
 using Castle.ActiveRecord.Framework.Config;
 using Microsoft.Practices.EnterpriseLibrary.Logging;

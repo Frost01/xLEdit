@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Castle.ActiveRecord;
 
-namespace BO
+namespace Models
 {
     [ActiveRecord("specifics")]
     public class Specialty : ActiveRecordBase<Specialty>

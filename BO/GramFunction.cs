@@ -5,7 +5,7 @@ using System.Text;
 using Castle.ActiveRecord;
 using NHibernate.Criterion;
 
-namespace BO
+namespace Models
 {
     [ActiveRecord("functions", Lazy = true)]
     public class GramFunction : ActiveRecordBase<GramFunction>

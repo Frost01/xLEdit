@@ -7,7 +7,7 @@ using System.Text;
 using Castle.ActiveRecord;
 using NHibernate.Criterion;
 
-namespace BO
+namespace Models
 {
     [ActiveRecord("basewords")]
     public class Baseword : ActiveRecordBase<Baseword>

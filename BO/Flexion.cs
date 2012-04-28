@@ -6,7 +6,7 @@ using System.Text;
 using Castle.ActiveRecord;
 using NHibernate.Criterion;
 
-namespace BO
+namespace Models
 {
     [ActiveRecord("words", Lazy = true)]
     public class Flexion : ActiveRecordBase<Flexion>

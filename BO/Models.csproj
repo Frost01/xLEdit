@@ -2,20 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{424E43C9-6978-4C79-9CD4-7B05173F997B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{4D3BFF7F-BFF7-4763-9607-EC7D96925C82}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>xLEdit</RootNamespace>
-    <AssemblyName>xLEdit</AssemblyName>
+    <RootNamespace>Models</RootNamespace>
+    <AssemblyName>Models</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -37,19 +34,7 @@
     <Reference Include="Castle.ActiveRecord">
       <HintPath>..\Libs\Castle.ActiveRecord.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\Libs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\Libs\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.Unity, Version=2.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\Libs\Microsoft.Practices.Unity.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data, Version=6.3.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\Libs\MySql.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="NHibernate, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libs\NHibernate.dll</HintPath>
@@ -63,22 +48,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CsvLoader.cs" />
-    <Compile Include="Importer.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Baseword.cs" />
+    <Compile Include="Basewords.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="Connections.cs" />
+    <Compile Include="FileReader.cs" />
+    <Compile Include="Flexion.cs" />
+    <Compile Include="GramFunction.cs" />
+    <Compile Include="Language.cs" />
+    <Compile Include="Languages.cs" />
+    <Compile Include="LinguisticFeature.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TranslationImport.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BO\Models.csproj">
-      <Project>{4D3BFF7F-BFF7-4763-9607-EC7D96925C82}</Project>
-      <Name>Models</Name>
-    </ProjectReference>
+    <Compile Include="Specialty.cs" />
+    <Compile Include="Translation.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Wordtype.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

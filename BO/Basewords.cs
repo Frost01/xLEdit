@@ -9,7 +9,7 @@ using Microsoft.Practices.EnterpriseLibrary.Logging;
 using NHibernate;
 using NHibernate.Criterion;
 
-namespace BO
+namespace Models
 {
     public class Basewords
     {
