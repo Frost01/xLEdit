@@ -20,12 +20,25 @@ namespace ViewModels
             }
         }
 
+        private ObservableCollection<WordtypeViewModel> _wordtypes;
+
+        public ObservableCollection<WordtypeViewModel> Wordtypes
+        {
+            get { return _wordtypes; }
+            set { SetPropertyValue(ref _wordtypes, value, () => Wordtypes); }
+        }
+
         public MainViewModel()
         {
             _languages = new ObservableCollection<LanguageViewModel>();
-            var languages = Models.Languages.GetAll();
-            foreach (Models.Language languageModel in languages){
+            foreach (Models.Language languageModel in Models.Languages.GetAll())
+            {
                 Languages.Add(new LanguageViewModel(languageModel));
+            }
+            _wordtypes = new ObservableCollection<WordtypeViewModel>();
+            foreach (var wordtypeModel in Models.Wordtype.FetchAll())
+            {
+                Wordtypes.Add(new WordtypeViewModel(wordtypeModel));
             }
         }
     }

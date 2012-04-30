@@ -49,6 +49,7 @@
     <Compile Include="LanguageViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WordtypeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Helper\" />

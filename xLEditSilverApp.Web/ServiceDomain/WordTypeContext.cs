@@ -1,5 +1,5 @@
 ﻿
-namespace xLEditSilverApp.Web
+namespace xLEditSilverApp.Web.ServiceDomain
 {
     using System;
     using System.Collections.Generic;
@@ -13,22 +13,16 @@ using Models;
 
     // TODO: Create methods containing your application logic.
     [EnableClientAccess()]
-    public class LanguagesServiceDomain : DomainService
+    public class WordTypeContext : DomainService
     {
-        public LanguagesServiceDomain()
+        public WordTypeContext()
         {
             Utils.InitializeCasteActiveRecordFramework();
         }
 
-        public IEnumerable<Language> GetAll()
+        public IEnumerable<Wordtype> GetWordtypes()
         {
-            return Languages.GetAll();
-        }
-
-        public IEnumerable<Language> GetLanguages()
-        {
-            Language language = new Language();
-            return language.FetchLanguages();
+            return Wordtype.FetchAll();
         }
     }
 }

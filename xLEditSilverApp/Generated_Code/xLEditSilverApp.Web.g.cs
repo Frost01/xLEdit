@@ -114,6 +114,100 @@ namespace Models
             return this._id;
         }
     }
+    
+    /// <summary>
+    /// The 'Wordtype' entity class.
+    /// </summary>
+    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/Models")]
+    public sealed partial class Wordtype : Entity
+    {
+        
+        private int _id;
+        
+        private string _text;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnIdChanging(int value);
+        partial void OnIdChanged();
+        partial void OnTextChanging(string value);
+        partial void OnTextChanged();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Wordtype"/> class.
+        /// </summary>
+        public Wordtype()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Id' value.
+        /// </summary>
+        [DataMember()]
+        [Editable(false, AllowInitialValue=true)]
+        [Key()]
+        [RoundtripOriginal()]
+        public int Id
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((this._id != value))
+                {
+                    this.OnIdChanging(value);
+                    this.ValidateProperty("Id", value);
+                    this._id = value;
+                    this.RaisePropertyChanged("Id");
+                    this.OnIdChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Text' value.
+        /// </summary>
+        [DataMember()]
+        public string Text
+        {
+            get
+            {
+                return this._text;
+            }
+            set
+            {
+                if ((this._text != value))
+                {
+                    this.OnTextChanging(value);
+                    this.RaiseDataMemberChanging("Text");
+                    this.ValidateProperty("Text", value);
+                    this._text = value;
+                    this.RaiseDataMemberChanged("Text");
+                    this.OnTextChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._id;
+        }
+    }
 }
 namespace xLEditSilverApp
 {
@@ -172,7 +266,7 @@ namespace xLEditSilverApp
         }
     }
 }
-namespace xLEditSilverApp.Web
+namespace xLEditSilverApp.Web.ServiceDomain
 {
     using System;
     using System.Collections.Generic;
@@ -188,9 +282,9 @@ namespace xLEditSilverApp.Web
     
     
     /// <summary>
-    /// The DomainContext corresponding to the 'LanguagesServiceDomain' DomainService.
+    /// The DomainContext corresponding to the 'LanguageContext' DomainService.
     /// </summary>
-    public sealed partial class LanguagesServiceDomain : DomainContext
+    public sealed partial class LanguageContext : DomainContext
     {
         
         #region Extensibility Method Definitions
@@ -205,34 +299,34 @@ namespace xLEditSilverApp.Web
         
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="LanguagesServiceDomain"/> class.
+        /// Initializes a new instance of the <see cref="LanguageContext"/> class.
         /// </summary>
-        public LanguagesServiceDomain() : 
-                this(new WebDomainClient<ILanguagesServiceDomainContract>(new Uri("xLEditSilverApp-Web-LanguagesServiceDomain.svc", UriKind.Relative)))
+        public LanguageContext() : 
+                this(new WebDomainClient<ILanguageContextContract>(new Uri("xLEditSilverApp-Web-ServiceDomain-LanguageContext.svc", UriKind.Relative)))
         {
         }
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="LanguagesServiceDomain"/> class with the specified service URI.
+        /// Initializes a new instance of the <see cref="LanguageContext"/> class with the specified service URI.
         /// </summary>
-        /// <param name="serviceUri">The LanguagesServiceDomain service URI.</param>
-        public LanguagesServiceDomain(Uri serviceUri) : 
-                this(new WebDomainClient<ILanguagesServiceDomainContract>(serviceUri))
+        /// <param name="serviceUri">The LanguageContext service URI.</param>
+        public LanguageContext(Uri serviceUri) : 
+                this(new WebDomainClient<ILanguageContextContract>(serviceUri))
         {
         }
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="LanguagesServiceDomain"/> class with the specified <paramref name="domainClient"/>.
+        /// Initializes a new instance of the <see cref="LanguageContext"/> class with the specified <paramref name="domainClient"/>.
         /// </summary>
         /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
-        public LanguagesServiceDomain(DomainClient domainClient) : 
+        public LanguageContext(DomainClient domainClient) : 
                 base(domainClient)
         {
             this.OnCreated();
         }
         
         /// <summary>
-        /// Gets the set of <see cref="Language"/> entity instances that have been loaded into this <see cref="LanguagesServiceDomain"/> instance.
+        /// Gets the set of <see cref="Language"/> entity instances that have been loaded into this <see cref="LanguageContext"/> instance.
         /// </summary>
         public EntitySet<Language> Languages
         {
@@ -240,16 +334,6 @@ namespace xLEditSilverApp.Web
             {
                 return base.EntityContainer.GetEntitySet<Language>();
             }
-        }
-        
-        /// <summary>
-        /// Gets an EntityQuery instance that can be used to load <see cref="Language"/> entity instances using the 'GetAll' query.
-        /// </summary>
-        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Language"/> entity instances.</returns>
-        public EntityQuery<Language> GetAllQuery()
-        {
-            this.ValidateMethod("GetAllQuery", null);
-            return base.CreateQuery<Language>("GetAll", null, false, true);
         }
         
         /// <summary>
@@ -268,33 +352,15 @@ namespace xLEditSilverApp.Web
         /// <returns>A new container instance.</returns>
         protected override EntityContainer CreateEntityContainer()
         {
-            return new LanguagesServiceDomainEntityContainer();
+            return new LanguageContextEntityContainer();
         }
         
         /// <summary>
-        /// Service contract for the 'LanguagesServiceDomain' DomainService.
+        /// Service contract for the 'LanguageContext' DomainService.
         /// </summary>
         [ServiceContract()]
-        public interface ILanguagesServiceDomainContract
+        public interface ILanguageContextContract
         {
-            
-            /// <summary>
-            /// Asynchronously invokes the 'GetAll' operation.
-            /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [FaultContract(typeof(DomainServiceFault), Action="http://tempuri.org/LanguagesServiceDomain/GetAllDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/LanguagesServiceDomain/GetAll", ReplyAction="http://tempuri.org/LanguagesServiceDomain/GetAllResponse")]
-            [WebGet()]
-            IAsyncResult BeginGetAll(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetAll'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetAll'.</param>
-            /// <returns>The 'QueryResult' returned from the 'GetAll' operation.</returns>
-            QueryResult<Language> EndGetAll(IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetLanguages' operation.
@@ -302,8 +368,8 @@ namespace xLEditSilverApp.Web
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [FaultContract(typeof(DomainServiceFault), Action="http://tempuri.org/LanguagesServiceDomain/GetLanguagesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/LanguagesServiceDomain/GetLanguages", ReplyAction="http://tempuri.org/LanguagesServiceDomain/GetLanguagesResponse")]
+            [FaultContract(typeof(DomainServiceFault), Action="http://tempuri.org/LanguageContext/GetLanguagesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/LanguageContext/GetLanguages", ReplyAction="http://tempuri.org/LanguageContext/GetLanguagesResponse")]
             [WebGet()]
             IAsyncResult BeginGetLanguages(AsyncCallback callback, object asyncState);
             
@@ -315,12 +381,122 @@ namespace xLEditSilverApp.Web
             QueryResult<Language> EndGetLanguages(IAsyncResult result);
         }
         
-        internal sealed class LanguagesServiceDomainEntityContainer : EntityContainer
+        internal sealed class LanguageContextEntityContainer : EntityContainer
         {
             
-            public LanguagesServiceDomainEntityContainer()
+            public LanguageContextEntityContainer()
             {
                 this.CreateEntitySet<Language>(EntitySetOperations.None);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// The DomainContext corresponding to the 'WordTypeContext' DomainService.
+    /// </summary>
+    public sealed partial class WordTypeContext : DomainContext
+    {
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WordTypeContext"/> class.
+        /// </summary>
+        public WordTypeContext() : 
+                this(new WebDomainClient<IWordTypeContextContract>(new Uri("xLEditSilverApp-Web-ServiceDomain-WordTypeContext.svc", UriKind.Relative)))
+        {
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WordTypeContext"/> class with the specified service URI.
+        /// </summary>
+        /// <param name="serviceUri">The WordTypeContext service URI.</param>
+        public WordTypeContext(Uri serviceUri) : 
+                this(new WebDomainClient<IWordTypeContextContract>(serviceUri))
+        {
+        }
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WordTypeContext"/> class with the specified <paramref name="domainClient"/>.
+        /// </summary>
+        /// <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
+        public WordTypeContext(DomainClient domainClient) : 
+                base(domainClient)
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets the set of <see cref="Wordtype"/> entity instances that have been loaded into this <see cref="WordTypeContext"/> instance.
+        /// </summary>
+        public EntitySet<Wordtype> Wordtypes
+        {
+            get
+            {
+                return base.EntityContainer.GetEntitySet<Wordtype>();
+            }
+        }
+        
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="Wordtype"/> entity instances using the 'GetWordtypes' query.
+        /// </summary>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Wordtype"/> entity instances.</returns>
+        public EntityQuery<Wordtype> GetWordtypesQuery()
+        {
+            this.ValidateMethod("GetWordtypesQuery", null);
+            return base.CreateQuery<Wordtype>("GetWordtypes", null, false, true);
+        }
+        
+        /// <summary>
+        /// Creates a new EntityContainer for this DomainContext's EntitySets.
+        /// </summary>
+        /// <returns>A new container instance.</returns>
+        protected override EntityContainer CreateEntityContainer()
+        {
+            return new WordTypeContextEntityContainer();
+        }
+        
+        /// <summary>
+        /// Service contract for the 'WordTypeContext' DomainService.
+        /// </summary>
+        [ServiceContract()]
+        public interface IWordTypeContextContract
+        {
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetWordtypes' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [FaultContract(typeof(DomainServiceFault), Action="http://tempuri.org/WordTypeContext/GetWordtypesDomainServiceFault", Name="DomainServiceFault", Namespace="DomainServices")]
+            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/WordTypeContext/GetWordtypes", ReplyAction="http://tempuri.org/WordTypeContext/GetWordtypesResponse")]
+            [WebGet()]
+            IAsyncResult BeginGetWordtypes(AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetWordtypes'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetWordtypes'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetWordtypes' operation.</returns>
+            QueryResult<Wordtype> EndGetWordtypes(IAsyncResult result);
+        }
+        
+        internal sealed class WordTypeContextEntityContainer : EntityContainer
+        {
+            
+            public WordTypeContextEntityContainer()
+            {
+                this.CreateEntitySet<Wordtype>(EntitySetOperations.None);
             }
         }
     }

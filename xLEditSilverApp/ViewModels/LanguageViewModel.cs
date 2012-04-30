@@ -10,7 +10,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Models;
 
-namespace xLEditSilverApp
+namespace xLEditSilverApp.ViewModels
 {
     public class LanguageViewModel
     {

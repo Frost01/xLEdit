@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-namespace xLEditSilverApp
+namespace xLEditSilverApp.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {

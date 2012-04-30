@@ -5,13 +5,29 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="400"
-    xmlns:viewmodels="clr-namespace:xLEditSilverApp"
+    xmlns:viewmodels="clr-namespace:xLEditSilverApp.ViewModels"
     >
     <UserControl.DataContext>
         <viewmodels:MainPageViewModel/>
     </UserControl.DataContext>
 
     <Grid x:Name="LayoutRoot" Background="White">
-        <ListBox ItemsSource="{Binding Path=Languages}" DisplayMemberPath="Text"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ListBox Grid.Row="0"
+                 Grid.Column="0"
+                 ItemsSource="{Binding Path=Languages}" 
+                 DisplayMemberPath="Text"/>
+        <ListBox Grid.Row="0"
+                 Grid.Column="1"
+                 ItemsSource="{Binding Path=Wordtypes}"
+                 DisplayMemberPath="Text"/>
     </Grid>
 </UserControl>
