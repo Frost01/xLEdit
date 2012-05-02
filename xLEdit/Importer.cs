@@ -50,7 +50,7 @@ namespace xLEdit
                 {
                     var karlId = row[0].ToString();
                     // Baseword
-                    var bwFrom = Baseword.GetOrCreateBy(row[0].ToString(), _language, _wordtype);
+                    var bwFrom = Baseword.GetOrCreateBy(row[1].ToString(), _language, _wordtype);
                     // Flexions
                     int numberOfFunctions = GramFunction.NumberOfFunctionsForWordTypeAndLanguage(_wordtype, _language);
                     var flexions = new string[numberOfFunctions];

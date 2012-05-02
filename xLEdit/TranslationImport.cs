@@ -15,7 +15,7 @@ namespace xLEdit
         private Language _langFrom;
         private Language _langTo;
         private Wordtype _wordtype;
-        private int _karlId;
+        private string _karlId;
 
         public TranslationImport(DataTable dt, Language langFrom, Language langTo, Wordtype wordtype)
         {
@@ -34,7 +34,7 @@ namespace xLEdit
                 {
                     StringBuilder logString = new StringBuilder();
                     var isFromNew = false;
-                    _karlId = Convert.ToInt32(row[0].ToString());
+                    _karlId = row[0].ToString();
                     logString.Append(_karlId + ";");
                     var bwFrom = Baseword.FindByTextLanguageType(row[1].ToString().Trim(), _langFrom, _wordtype);
                     if (bwFrom == null)
@@ -48,14 +48,25 @@ namespace xLEdit
                     }
                     logString.Append(isFromNew + ";" +bwFrom.Id + ";" + bwFrom.Text + ";");
 
+                    // hole varierende wortart wenn angegeben
+                    var newWordType = _wordtype;
+                    if (_dt.Columns.Count > 3)
+                    {
+                        int wordtypeId;
+                        if (Int32.TryParse(row[3].ToString(), out wordtypeId))
+                        {
+                            newWordType = Wordtype.Find(wordtypeId);
+                        }
+                    }
+
                     var isToNew = false;
-                    var bwTo = Baseword.FindByTextLanguageType(row[2].ToString().Trim(), _langTo, _wordtype);
+                    var bwTo = Baseword.FindByTextLanguageType(row[2].ToString().Trim(), _langTo, newWordType);
                     if (bwTo == null)
                     {
                         isToNew = true;
                         bwTo = new Baseword();
                         bwTo.Lang = _langTo;
-                        bwTo.WordType = _wordtype;
+                        bwTo.WordType = newWordType;
                         bwTo.Text = row[2].ToString().Trim();
                         bwTo.Save();
                     }

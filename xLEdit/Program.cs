@@ -22,15 +22,21 @@ namespace xLEdit
 
             using (var sessionScope = new SessionScope())
             {
+                // import swahili pronomen
+                var loader = new CsvLoader("swPersPron.txt", '\t');
+                var importer = new TranslationImport(loader.DataTable, Language.Find(1), Language.Find(7),
+                                                     Wordtype.Find(10));
+                importer.DoImport();
+
                 // import swahili nouns
                 //var loader = new CsvLoader("swNouns.txt", '\t');
                 //var importer = new Importer(loader.DataTable, Language.Find(7), Wordtype.Find(15), Language.Find(1));
                 //importer.DoImport(true,5);
 
                 // import yoruba
-                var loader = new CsvLoader("yoAdj.txt", '\t');
-                var importer = new Importer(loader.DataTable, Language.Find(9), Wordtype.Find(1), Language.Find(1));
-                importer.DoSimpleImport();
+                //var loader = new CsvLoader("yoAdj.txt", '\t');
+                //var importer = new Importer(loader.DataTable, Language.Find(9), Wordtype.Find(1), Language.Find(1));
+                //importer.DoSimpleImport();
 
                 //var loader = new CsvLoader();
                 //loader.Load("import_prep.txt", '\t');
