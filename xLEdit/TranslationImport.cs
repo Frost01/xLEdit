@@ -14,84 +14,50 @@ namespace xLEdit
         private DataTable _dt;
         private Language _langFrom;
         private Language _langTo;
-        private Wordtype _wordtype;
         private string _karlId;
 
-        public TranslationImport(DataTable dt, Language langFrom, Language langTo, Wordtype wordtype)
+        public TranslationImport(DataTable dt, Language langFrom, Language langTo)
         {
             _dt = dt;
             _langFrom = langFrom;
             _langTo = langTo;
-            _wordtype = wordtype;
         }
 
-        public void DoImport()
+        public void DoImport(bool bothDirections)
         {
             var sb = new StringBuilder();
             foreach (DataRow row in _dt.Rows)
             {
-                try
-                {
-                    StringBuilder logString = new StringBuilder();
-                    var isFromNew = false;
-                    _karlId = row[0].ToString();
-                    logString.Append(_karlId + ";");
-                    var bwFrom = Baseword.FindByTextLanguageType(row[1].ToString().Trim(), _langFrom, _wordtype);
-                    if (bwFrom == null)
-                    {
-                        isFromNew = true;
-                        bwFrom = new Baseword();
-                        bwFrom.Lang = _langFrom;
-                        bwFrom.WordType = _wordtype;
-                        bwFrom.Text = row[1].ToString().Trim();
-                        bwFrom.Save();
-                    }
-                    logString.Append(isFromNew + ";" +bwFrom.Id + ";" + bwFrom.Text + ";");
+                var logString = new StringBuilder();
+                _karlId = row[0].ToString();
+                if (String.IsNullOrWhiteSpace(row[1].ToString()) || String.IsNullOrWhiteSpace(row[3].ToString())) continue;
+                var bwFrom = GetOrCreateBaseword(row[2].ToString(), Wordtype.Find(Int32.Parse(row[1].ToString())), _langFrom);
 
-                    // hole varierende wortart wenn angegeben
-                    var newWordType = _wordtype;
-                    if (_dt.Columns.Count > 3)
-                    {
-                        int wordtypeId;
-                        if (Int32.TryParse(row[3].ToString(), out wordtypeId))
-                        {
-                            newWordType = Wordtype.Find(wordtypeId);
-                        }
-                    }
-
-                    var isToNew = false;
-                    var bwTo = Baseword.FindByTextLanguageType(row[2].ToString().Trim(), _langTo, newWordType);
-                    if (bwTo == null)
-                    {
-                        isToNew = true;
-                        bwTo = new Baseword();
-                        bwTo.Lang = _langTo;
-                        bwTo.WordType = newWordType;
-                        bwTo.Text = row[2].ToString().Trim();
-                        bwTo.Save();
-                    }
-                    logString.Append(isToNew+ ";" + bwTo.Id+";"+bwTo.Text);
-
-                    Console.Out.WriteLine("Inserting Translation: {0}", logString.ToString());
-                    Translation.InsertIfNotExists(bwFrom, bwTo);
-                    sb.AppendLine(logString.ToString());
-                }
-                catch (Exception ex)
-                {
-                    Logger.Write(string.Format("Translation Import Failed with Error : {0}",  ex.Message));
-                    using (var writer = new StreamWriter(string.Format("ImportLog.csv")))
-                    {
-                        writer.Write(sb.ToString());
-                    }
-                }
+                var wordtypesRow = 1;
+                if (_dt.Columns.Count > 4)
+                    wordtypesRow = 4;
+                var bwTo = GetOrCreateBaseword(row[3].ToString(), Wordtype.Find(Int32.Parse(row[wordtypesRow].ToString())),_langTo);
+                logString.Append(_karlId + ";" + bwFrom.Id + ";" + bwFrom.Text + ";" + 
+                                    ";" + bwTo.Id + ";" + bwTo.Text);
+                Console.Out.WriteLine("Inserting Translation: {0}", logString);
+                Translation.InsertIfNotExists(bwFrom, bwTo, 0, bothDirections);
+                sb.AppendLine(logString.ToString());
             }
-            using (var writer = new StreamWriter(string.Format("ImportLog.csv")))
+            using (var writer = new StreamWriter(string.Format("Import_{0}{1}.csv", _langFrom.Text, _langTo.Text)))
             {
                 writer.Write(sb.ToString());
             }
         }
 
-
-
+        private Baseword GetOrCreateBaseword(string text, Wordtype wordtype, Language language)
+        {
+            var bwFrom = Baseword.FindByTextLanguageType(text.Trim(), language, wordtype);
+            if (bwFrom == null)
+            {
+                bwFrom = new Baseword { Lang = language, WordType = wordtype, Text = text };
+                bwFrom.Save();
+            }
+            return bwFrom;
+        }
     }
 }

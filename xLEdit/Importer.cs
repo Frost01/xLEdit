@@ -25,23 +25,7 @@ namespace xLEdit
             _targetLanguage = targetLanguage;
         }
 
-        public void DoSimpleImport()
-        {
-            var sb = new StringBuilder();
-            foreach (DataRow row in _dt.Rows)
-            {
-                var baseword = Baseword.GetOrCreateBy(row[0].ToString(), _language, _wordtype);
-                baseword.Save();
-                var targetBaseword = Baseword.GetOrCreateBy(row[1].ToString(), _targetLanguage, _wordtype);
-                targetBaseword.Save();
-                Translation.InsertIfNotExists(baseword, targetBaseword, withBothDirection: true);
-                sb.AppendLine(baseword.Id + ";" + baseword.Text + ";" + targetBaseword.Id + ";" + targetBaseword.Text);
-                Console.Out.WriteLine(string.Format("Added Baseword {0} with Id: {1} and Translation {2}", baseword.Text, baseword.Id, targetBaseword.Text));
-            }
-            WriteImportLog("SimpleImport.csv",sb.ToString());
-        }
-
-        public void DoImport(bool withSpecifics, int specCol = 0)
+        public void DoImport(bool withSpecifics = false, int specCol = 0)
         {
             var sb = new StringBuilder();
             foreach (DataRow row in _dt.Rows)
@@ -51,6 +35,7 @@ namespace xLEdit
                     var karlId = row[0].ToString();
                     // Baseword
                     var bwFrom = Baseword.GetOrCreateBy(row[1].ToString(), _language, _wordtype);
+                    bwFrom.Save();
                     // Flexions
                     int numberOfFunctions = GramFunction.NumberOfFunctionsForWordTypeAndLanguage(_wordtype, _language);
                     var flexions = new string[numberOfFunctions];
@@ -73,21 +58,21 @@ namespace xLEdit
                     }
                     bwFrom.Save();
                     // Translation
-                    var bwTo = Baseword.FindByTextLanguageType(row.ItemArray.Last().ToString(), _targetLanguage,
-                                                               _wordtype);
-                    if (bwTo == null)
-                    {
-                        bwTo = new Baseword();
-                        bwTo.Lang = _targetLanguage;
-                        bwTo.WordType = _wordtype;
-                        bwTo.Text = row.ItemArray.Last().ToString().Trim();
-                        bwTo.Save();
-                    }
-                    int position = 0;
-                    Int32.TryParse(row.ItemArray[row.ItemArray.Count() - 2].ToString(), out position);
-                    Translation.InsertIfNotExists(bwFrom, bwTo, position);
-                    Translation.InsertIfNotExists(bwTo,bwFrom);
-                    sb.AppendLine(karlId + ";" + bwFrom.Id + ";" + bwFrom.Text + ";" + bwTo.Id + ";" + bwTo.Text);
+                    //var bwTo = Baseword.FindByTextLanguageType(row.ItemArray.Last().ToString(), _targetLanguage,
+                    //                                           _wordtype);
+                    //if (bwTo == null)
+                    //{
+                    //    bwTo = new Baseword();
+                    //    bwTo.Lang = _targetLanguage;
+                    //    bwTo.WordType = _wordtype;
+                    //    bwTo.Text = row.ItemArray.Last().ToString().Trim();
+                    //    bwTo.Save();
+                    //}
+                    //int position = 0;
+                    //Int32.TryParse(row.ItemArray[row.ItemArray.Count() - 2].ToString(), out position);
+                    //Translation.InsertIfNotExists(bwFrom, bwTo, position);
+                    //Translation.InsertIfNotExists(bwTo,bwFrom);
+                    //sb.AppendLine(karlId + ";" + bwFrom.Id + ";" + bwFrom.Text + ";" + bwTo.Id + ";" + bwTo.Text);
                     Console.Out.WriteLine("Imported Baseword: {0} as Item Nr {1} of {2}",bwFrom.Text,_dt.Rows.IndexOf(row), _dt.Rows.Count);
                 }
                 catch (Exception ex)

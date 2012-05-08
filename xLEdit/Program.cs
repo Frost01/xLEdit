@@ -22,35 +22,9 @@ namespace xLEdit
 
             using (var sessionScope = new SessionScope())
             {
-                // import swahili pronomen
-                var loader = new CsvLoader("swPersPron.txt", '\t');
-                var importer = new TranslationImport(loader.DataTable, Language.Find(1), Language.Find(7),
-                                                     Wordtype.Find(10));
-                importer.DoImport();
-
-                // import swahili nouns
-                //var loader = new CsvLoader("swNouns.txt", '\t');
-                //var importer = new Importer(loader.DataTable, Language.Find(7), Wordtype.Find(15), Language.Find(1));
-                //importer.DoImport(true,5);
-
-                // import yoruba
-                //var loader = new CsvLoader("yoAdj.txt", '\t');
-                //var importer = new Importer(loader.DataTable, Language.Find(9), Wordtype.Find(1), Language.Find(1));
-                //importer.DoSimpleImport();
-
-                //var loader = new CsvLoader();
-                //loader.Load("import_prep.txt", '\t');
-                //var import = new TranslationImport(loader.DataTable, Language.Find(1), Language.Find(4),
-                //                                   Wordtype.Find(12));
-                //import.DoImport();
-
-
-                //var loader = new CsvLoader("deleteBasewords.txt", '\t');
-                //Basewords.DeleteByIds(loader.DataTable);
-
-                //var loader = new CsvLoader("updateFlexions.txt",'\t');
-                //Basewords.UpdateConnections(loader.DataTable);
-
+                var loader = new CsvLoader("EnDeTranslations.txt", '\t');
+                var import = new TranslationImport(loader.DataTable, Language.Find(3), Language.Find(1));
+                import.DoImport(true);
 
                 Console.Out.WriteLine("Finished import...");
                 Console.ReadKey();

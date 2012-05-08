@@ -37,6 +37,7 @@ namespace xLEdit
                     _dataTable.Rows.Add(data);
                 }
             }
+            else throw new FileNotFoundException(fName+ " not found!");
         }
     }
 }
